@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sql-file
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234AC5678ac@@
+      MYSQL_DATABASE: product
+    ports:
+      - "1000:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-app
+    ports:
+      - "3000:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.99.100:1000/product
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234AC5678ac@@
+
+volumes:
+  mysql-data:
